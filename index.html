@@ -1,81 +1,122 @@
-<div class="container">
-    <h2>Blackjack Tracker</h2>
-    
-    <div id="insuranceAlert" class="alert">⚠️ TAKE INSURANCE (True Count ≥ +3)</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Counter</title>
+    <!-- Links your custom styles file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <div class="grid-2">
-        <div class="stat-box">
-            <div class="stat-label">Running Total</div>
-            <div id="runningTotal" class="stat-value">0</div>
+    <div class="tracker-container">
+        <h1>Blackjack Tracker</h1>
+        
+        <div class="stat-row">
+            <strong>Running Total:</strong> <span id="running-total">0</span>
         </div>
-        <div class="stat-box">
-            <div id="deckLabel" class="stat-label">decks left: 8</div>
-            <div id="cardsLeft" class="stat-value">416</div>
+        
+        <div class="stat-row">
+            <strong>Active Position:</strong> <span class="active-position">Seat 1</span>
         </div>
-    </div>
-
-    <div class="grid-2">
-        <div class="stat-box">
-            <div class="stat-label">True Count</div>
-            <div id="trueCount" class="stat-value">0.0</div>
+        
+        <p class="action-log">Last Action: Shoe & Seats Fully Reset</p>
+        
+        <div class="stat-row highlight">
+            <strong>decks left: <span id="decks-count">8</span> (416 cards left)</strong>
         </div>
-        <div class="stat-box">
-            <div class="stat-label">Recommended Bet</div>
-            <div id="recBet" class="stat-value">$10</div>
+        
+        <div class="stat-row">
+            <strong>True Count:</strong> <span id="true-count">0.0</span>
         </div>
-    </div>
+        
+        <div class="stat-row recommended">
+            <strong>Recommended Bet:</strong> <span id="recommended-bet">$10</span>
+        </div>
 
-    <div class="btn-group">
-        <button class="btn-plus" id="btnLow">Low (2-6)<br>+1</button>
-        <button class="btn-neutral" id="btnNeut">Neut (7-9)<br>0</button>
-        <button class="btn-minus" id="btnHigh">High (10-A)<br>-1</button>
-    </div>
+        <!-- Counting Buttons -->
+        <div class="button-group">
+            <button class="btn count-btn low" data-value="1">Low (2-6) [+1]</button>
+            <button class="btn count-btn neut" data-value="0">Neut (7-9) [0]</button>
+            <button class="btn count-btn high" data-value="-1">High (10-A) [-1]</button>
+        </div>
 
-    <div class="input-group">
-        <label for="baseBet">Table Minimum ($)</label>
-        <input type="number" id="baseBet" value="10" min="1">
-    </div>
-
-    <div class="strategy-box">
-        <div class="stat-label" style="margin-bottom:10px;">Live Decision Assistant <span style="color:#4caf50; font-size:10px;">(Deviations Loaded)</span></div>
-        <div class="grid-2" style="margin-bottom:0;">
-            <div>
-                <label style="font-size:12px; color:#aaa;">Your Hand</label>
-                <select id="playerHand">
-                    <optgroup label="Hard Totals">
-                        <option value="H8">8 or less</option><option value="H9">9</option>
-                        <option value="H10">10</option><option value="H11">11</option>
-                        <option value="H12">12</option><option value="H13">13</option>
-                        <option value="H14">14</option><option value="H15">15</option>
-                        <option value="H16">16</option><option value="H17">17+</option>
-                    </optgroup>
-                    <optgroup label="Soft Totals">
-                        <option value="S13">A,2 (Soft 13)</option><option value="S14">A,3 (Soft 14)</option>
-                        <option value="S15">A,4 (Soft 15)</option><option value="S16">A,5 (Soft 16)</option>
-                        <option value="S17">A,6 (Soft 17)</option><option value="S18">A,7 (Soft 18)</option>
-                        <option value="S19">A,8+</option>
-                    </optgroup>
-                    <optgroup label="Pairs">
-                        <option value="P2">2,2</option><option value="P3">3,3</option>
-                        <option value="P4">4,4</option><option value="P5">5,5</option>
-                        <option value="P6">6,6</option><option value="P7">7,7</option>
-                        <option value="P8">8,8</option><option value="P9">9,9</option>
-                        <option value="P10">10,10</option><option value="PA">A,A</option>
-                </select>
-            </div>
-            <div>
-                <label style="font-size:12px; color:#aaa;">Dealer Upcard</label>
-                <select id="dealerCard">
-                    <option value="2">2</option><option value="3">3</option>
-                    <option value="4">4</option><option value="5">5</option>
-                    <option value="6">6</option><option value="7">7</option>
-                    <option value="8">8</option><option value="9">9</option>
-                    <option value="10">10/J/Q/K</option><option value="A">A</option>
-                </select>
+        <!-- Manual Controls Section -->
+        <div class="controls-card manual-controls">
+            <h3>Manual Seat Jump Controls:</h3>
+            <p class="subtext">If a player stands or a seat is empty, tap below to jump directly to the right position:</p>
+            <div class="seat-buttons">
+                <button class="seat-btn">S1</button>
+                <button class="seat-btn">S2</button>
+                <button class="seat-btn">S3</button>
+                <button class="seat-btn">S4</button>
+                <button class="seat-btn">S5</button>
+                <button class="seat-btn">S6</button>
+                <button class="seat-btn">S7</button>
+                <button class="seat-btn dealer">Dealer</button>
             </div>
         </div>
-        <div id="decisionDisplay" class="decision-display decision-HIT">HIT</div>
+
+        <!-- Shoe Adjustments Section -->
+        <div class="controls-card adjustment-controls">
+            <h3>Local Shoe Adjustments:</h3>
+            <div class="flex-row">
+                <label>Burn/Adjust Cards Left:</label>
+                <input type="number" placeholder="e.g. 7" id="burn-input">
+                <button class="action-btn">Subtract From Shoe</button>
+            </div>
+        </div>
+
+        <div class="stat-row table-min">
+            <label>Table Minimum ($):</label>
+            <input type="number" value="10" id="table-minimum">
+        </div>
+
+        <!-- Live Assistant Section -->
+        <div class="assistant-card">
+            <h2>Live Decision Assistant (Deviations Loaded)</h2>
+            
+            <div class="input-row">
+                <label>Your Hand:</label>
+                <select id="user-hand">
+                    <option value="8-less">8 or less</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17-more">17 or more</option>
+                </select>
+            </div>
+
+            <div class="input-row">
+                <label>Dealer Upcard:</label>
+                <select id="dealer-upcard">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="A">A</option>
+                </select>
+            </div>
+
+            <div class="decision-output">
+                <strong>Recommended Move: <span class="move-highlight">HIT</span></strong>
+            </div>
+        </div>
+
+        <button class="reset-btn" id="reset-shoe-btn">Reset Shoe</button>
     </div>
 
-    <button class="reset-btn" id="btnReset">Reset Shoe</button>
-</div>
+    <!-- Connects your custom computation logic engine -->
+    <script src="script.js"></script>
+</body>
+</html>
